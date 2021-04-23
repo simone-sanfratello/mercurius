@@ -421,6 +421,7 @@ const plugin = fp(async function (app, opts) {
 
       if (cachedError) {
         // this query errored
+        console.log('cachedError')
         const err = new MER_ERR_GQL_VALIDATION()
         err.errors = cachedError.validationErrors
         throw err
@@ -429,6 +430,7 @@ const plugin = fp(async function (app, opts) {
       try {
         document = parse(source)
       } catch (syntaxError) {
+        console.log('syntaxError')
         const err = new MER_ERR_GQL_VALIDATION()
         err.errors = [syntaxError]
         throw err
@@ -454,6 +456,7 @@ const plugin = fp(async function (app, opts) {
         if (lruErrors) {
           lruErrors.set(source, { document, validationErrors })
         }
+        console.log('validationErrors')
         const err = new MER_ERR_GQL_VALIDATION()
         err.errors = validationErrors
         throw err
@@ -463,6 +466,7 @@ const plugin = fp(async function (app, opts) {
         const queryDepthErrors = queryDepth(document.definitions, queryDepthLimit)
 
         if (queryDepthErrors.length > 0) {
+          console.log('queryDepthErrors')
           const err = new MER_ERR_GQL_VALIDATION()
           err.errors = queryDepthErrors
           throw err
@@ -501,6 +505,7 @@ const plugin = fp(async function (app, opts) {
     if (variables !== undefined) {
       const executionContext = buildExecutionContext(fastifyGraphQl.schema, document, root, context, variables, operationName)
       if (Array.isArray(executionContext)) {
+        console.log('isArray(executionContext)')
         const err = new MER_ERR_GQL_VALIDATION()
         err.errors = executionContext
         throw err
